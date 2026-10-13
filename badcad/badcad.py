@@ -310,6 +310,13 @@ class Solid:
         m = manifold3d.Mesh(verts, tris, face_id=np.arange(len(tris)))
         return Solid(Manifold(m))
 
+    def refine_edges(self, max_length):
+        """Split the triangles until no edge is longer than `max_length`
+        (mm). The new vertices are on the old flat faces, so the form does
+        not change. This uses the manifold refine, which keeps the face
+        ids and gives a more even mesh than refine_to_length()."""
+        return Solid(self.manifold.refine_to_length(max_length))
+
     def minkowski_sum(self, other):
         return Solid(self.manifold.minkowski_sum(other.manifold))
 
